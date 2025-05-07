@@ -17,40 +17,26 @@ package org.springframework.ai.mcp.samples.client;
 
 import java.util.List;
 
-import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.McpAsyncClient;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.ai.mcp.AsyncMcpToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class McpClientApplication {
+public class McpWebFluxClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(McpClientApplication.class, args);
+		SpringApplication.run(McpWebFluxClientApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder,
-			ConfigurableApplicationContext context, List<McpSyncClient> mcpClients) {
-
-		return args -> {
-
-			var mcpToolProvider = new SyncMcpToolCallbackProvider(mcpClients);
-
-			ChatClient chatClient = chatClientBuilder.build();
-
-			System.out.println("Response: " +
-					chatClient.prompt("What is the weather in Amsterdam right now?")
-							.tools(mcpToolProvider)
-							.call()
-							.content());
-
-			context.close();
-		};
+	ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpAsyncClient> mcpClients) {
+		return chatClientBuilder
+				.defaultToolCallbacks(new AsyncMcpToolCallbackProvider(mcpClients))
+				.build();
 	}
+
 }

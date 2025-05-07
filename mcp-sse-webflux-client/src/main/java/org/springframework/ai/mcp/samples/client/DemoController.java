@@ -1,5 +1,8 @@
 package org.springframework.ai.mcp.samples.client;
 
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,23 +17,8 @@ class DemoController {
     }
 
     @GetMapping("/")
-    String index(String query) {
-        var currentWeatherBlock = "";
-
-        if (StringUtils.hasText(query)) {
-            var chatResponse = chatClient.prompt("What is the weather in %s right now?".formatted(query))
-                    .call()
-                    .content();
-
-            currentWeatherBlock = """
-                    <h2>Weather in %s</h2>
-                    <p>%s</p>
-                    <form action="" method="GET">
-                    <button type="submit">Clear</button>
-                    </form>
-                    """.formatted(query, chatResponse);
-        }
-        return """
+    Mono<String> index(String query) {
+        String questionForm = """
                 <h1>Demo controller</h1>
                 %s
                 <h2>Ask for the weather</h2>
@@ -38,6 +26,26 @@ class DemoController {
                 <form action="" method="GET">
                     <input type="text" name="query" value="" placeholder="Paris" />
                 </form>
-                """.formatted(currentWeatherBlock);
+                """;
+
+        if (StringUtils.hasText(query)) {
+            var chatResponse = Mono.fromSupplier(() -> this.chatClient.prompt("What is the weather in %s right now?".formatted(query))
+                    .call()
+                    .content())
+                    .subscribeOn(Schedulers.boundedElastic());
+
+            return chatResponse.map(r ->
+            """
+                    <h2>Weather in %s</h2>
+                    <p>%s</p>
+                    <form action="" method="GET">
+                    <button type="submit">Clear</button>
+                    </form>
+                    """.formatted(query, r))
+                    .map(questionForm::formatted);
+        }
+
+        return Mono.just(questionForm);
     }
+
 }

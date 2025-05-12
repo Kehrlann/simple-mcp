@@ -24,6 +24,12 @@ import org.springframework.ai.mcp.AsyncMcpToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 public class McpWebFluxClientApplication {
@@ -37,6 +43,26 @@ public class McpWebFluxClientApplication {
 		return chatClientBuilder
 				.defaultToolCallbacks(new AsyncMcpToolCallbackProvider(mcpClients))
 				.build();
+	}
+
+	@Bean
+	WebClient.Builder webClientBuilder(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
+		ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+				new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+		oauth2Client.setDefaultClientRegistrationId("authserver");
+		return WebClient.builder()
+				.filter(oauth2Client);
+	}
+
+	@Bean
+	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+		http
+				.authorizeExchange(authorize -> authorize
+						.anyExchange().permitAll()
+				)
+				.oauth2Client(Customizer.withDefaults())
+				.csrf(ServerHttpSecurity.CsrfSpec::disable);
+		return http.build();
 	}
 
 }

@@ -2,8 +2,8 @@ package org.springframework.ai.mcp.samples.client;
 
 import javax.validation.constraints.NotNull;
 
+import java.util.stream.Collectors;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,6 @@ class DemoController {
                     <input type="text" name="query" value="" placeholder="Paris" />
                 </form>
                 """;
-
         return Mono.justOrEmpty(query)
                 .flatMap(this::getChatResponse)
                 .switchIfEmpty(Mono.just(""))
@@ -36,10 +35,10 @@ class DemoController {
     }
 
     private Mono<String> getChatResponse(@NotNull String query) {
-        return Mono.fromSupplier(() -> this.chatClient.prompt("What is the weather in %s right now?".formatted(query))
-                .call()
+        return this.chatClient.prompt("What is the weather in %s right now?".formatted(query))
+                .stream()
                 .content()
-        ).subscribeOn(Schedulers.boundedElastic());
+                .collect(Collectors.joining());
     }
 
 }

@@ -1,10 +1,11 @@
 package org.springframework.ai.mcp.samples.client;
 
+import javax.validation.constraints.NotNull;
+
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,24 +29,17 @@ class DemoController {
                 </form>
                 """;
 
-        if (StringUtils.hasText(query)) {
-            var chatResponse = Mono.fromSupplier(() -> this.chatClient.prompt("What is the weather in %s right now?".formatted(query))
-                    .call()
-                    .content())
-                    .subscribeOn(Schedulers.boundedElastic());
+        return Mono.justOrEmpty(query)
+                .flatMap(this::getChatResponse)
+                .switchIfEmpty(Mono.just(""))
+                .map(questionForm::formatted);
+    }
 
-            return chatResponse.map(r ->
-            """
-                    <h2>Weather in %s</h2>
-                    <p>%s</p>
-                    <form action="" method="GET">
-                    <button type="submit">Clear</button>
-                    </form>
-                    """.formatted(query, r))
-                    .map(questionForm::formatted);
-        }
-
-        return Mono.just(questionForm);
+    private Mono<String> getChatResponse(@NotNull String query) {
+        return Mono.fromSupplier(() -> this.chatClient.prompt("What is the weather in %s right now?".formatted(query))
+                .call()
+                .content()
+        ).subscribeOn(Schedulers.boundedElastic());
     }
 
 }

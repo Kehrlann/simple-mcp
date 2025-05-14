@@ -27,7 +27,7 @@ public class McpServerApplication {
         return http
                 // Required for now, we can't do request-level security
                 // because the authorization depends on the
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .oauth2ResourceServer(res -> res.jwt(Customizer.withDefaults()))
                 .csrf(CsrfConfigurer::disable)
                 .build();

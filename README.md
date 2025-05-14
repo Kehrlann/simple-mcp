@@ -1,7 +1,7 @@
 ## Pre-requisite
 
 You MUST use this exact build of Spring
-AI: https://github.com/spring-projects/spring-ai/compare/main...Kehrlann:spring-ai:dgarnier/poc-propagate-reactive-context-to-mcp-async
+AI: https://github.com/Kehrlann/spring-ai/tree/dgarnier/poc-propagate-reactive-context-to-mcp-async
 
 ## Usage
 

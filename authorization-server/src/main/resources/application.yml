@@ -25,4 +25,6 @@ spring:
                 - "refresh_token"
               redirect-uris:
                 - "http://127.0.0.1:8081/authorize/oauth2/code/authserver"
+                - "http://127.0.0.1:8081/login/oauth2/code/authserver"
                 - "http://localhost:8081/authorize/oauth2/code/authserver"
+                - "http://localhost:8081/login/oauth2/code/authserver"

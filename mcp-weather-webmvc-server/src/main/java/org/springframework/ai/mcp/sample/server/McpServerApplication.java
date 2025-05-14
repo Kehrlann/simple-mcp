@@ -1,8 +1,5 @@
 package org.springframework.ai.mcp.sample.server;
 
-import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
@@ -11,9 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @SpringBootApplication
 public class McpServerApplication {

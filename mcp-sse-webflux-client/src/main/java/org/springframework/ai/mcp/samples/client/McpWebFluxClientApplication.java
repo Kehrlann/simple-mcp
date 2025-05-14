@@ -35,7 +35,6 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ServerWebExchange;
 
 @SpringBootApplication
 @EnableWebFluxSecurity
@@ -59,13 +58,7 @@ public class McpWebFluxClientApplication {
      */
     @Bean
     WebClient.Builder webClientBuilder(McpClientExchangeFilterFunction filter) {
-        return WebClient.builder()
-                .filter(((request, next) ->
-                        Mono.empty()
-                                .doOnSubscribe(s -> System.out.println("MCP WebClient Intercept"))
-                                .then(next.exchange(request))
-                ))
-                .filter(filter);
+        return WebClient.builder().filter(filter);
     }
 
     /**
@@ -76,43 +69,26 @@ public class McpWebFluxClientApplication {
      */
     @Bean
     public AnthropicApi anthropicApi(AnthropicConnectionProperties connectionProperties, ResponseErrorHandler responseErrorHandler) {
-        return new AnthropicApi(
-                connectionProperties.getBaseUrl(),
-                connectionProperties.getCompletionsPath(),
-                connectionProperties.getApiKey(),
-                connectionProperties.getVersion(),
-                RestClient.builder().requestInterceptor((request, body, execution) -> {
-                    // Show that we are NOT using the RestClient, this should never come up
-                    System.out.println("⛔️ Anthropic RestClient Intercept");
-                    return execution.execute(request, body);
-                }),
-                WebClient.builder()
+        return AnthropicApi.builder()
+                .baseUrl(connectionProperties.getBaseUrl())
+                .completionsPath(connectionProperties.getCompletionsPath())
+                .apiKey(connectionProperties.getApiKey())
+                .anthropicVersion(connectionProperties.getVersion())
+                .anthropicBetaFeatures(connectionProperties.getBetaVersion())
+                .responseErrorHandler(responseErrorHandler)
+                .restClientBuilder(
+                        RestClient.builder().requestInterceptor((request, body, execution) -> {
+                            // Show that we are NOT using the RestClient, this should never come up
+                            System.out.println("⛔️ Anthropic RestClient Intercept");
+                            return execution.execute(request, body);
+                        })
+                )
+                .webClientBuilder(WebClient.builder()
                         .filter((req, next) -> Mono.empty()
                                 // Show that we are indeed using the WebClient
                                 .doOnSubscribe(s -> System.out.println("✅ Anthropic WebClient Intercept"))
-                                .then(getExchangeFromContext("Anthropic WebClient Intercept"))
-                                .then(next.exchange(req))),
-                responseErrorHandler,
-                connectionProperties.getBetaVersion()
-        );
-    }
-
-
-    /**
-     * Something similar is used internally in Spring Security's McpClientExchangeFilterFunction.
-     * There should be a `ServerWebExchange` in the context, through:
-     * {@link org.springframework.security.config.web.server.ServerHttpSecurity.ServerWebExchangeReactorContextWebFilter}
-     */
-    public static Mono<ServerWebExchange> getExchangeFromContext(String callSite) {
-        return Mono.deferContextual(Mono::just)
-                .doOnNext(x -> {
-                    System.out.println(callSite + " - reactive context: " + x);
-                })
-                .filter(c -> c.hasKey(ServerWebExchange.class))
-                .map(c -> c.get(ServerWebExchange.class))
-                .doOnNext(x -> {
-                    System.out.println(callSite + " - reactive context's ServerWebExchange: " + x);
-                });
+                                .then(next.exchange(req))))
+                .build();
     }
 
 

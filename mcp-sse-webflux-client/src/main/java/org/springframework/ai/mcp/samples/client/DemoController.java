@@ -2,6 +2,7 @@ package org.springframework.ai.mcp.samples.client;
 
 import javax.validation.constraints.NotNull;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 import reactor.core.publisher.Mono;
 

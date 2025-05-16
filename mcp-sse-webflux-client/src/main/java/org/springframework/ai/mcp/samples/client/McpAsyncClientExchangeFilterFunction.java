@@ -34,7 +34,7 @@ import org.springframework.web.server.ServerWebExchange;
  * on the OAuth2 {@code client_credentials} flow for machine-to-machine communication.
  */
 @Component
-public class McpClientExchangeFilterFunction implements ExchangeFilterFunction {
+public class McpAsyncClientExchangeFilterFunction implements ExchangeFilterFunction {
 
 	private final ClientCredentialsReactiveOAuth2AuthorizedClientProvider clientCredentialTokenProvider = new ClientCredentialsReactiveOAuth2AuthorizedClientProvider();
 
@@ -42,8 +42,8 @@ public class McpClientExchangeFilterFunction implements ExchangeFilterFunction {
 
 	private final ReactiveClientRegistrationRepository clientRegistrationRepository;
 
-	public McpClientExchangeFilterFunction(ReactiveOAuth2AuthorizedClientManager clientManager,
-			ReactiveClientRegistrationRepository clientRegistrationRepository) {
+	public McpAsyncClientExchangeFilterFunction(ReactiveOAuth2AuthorizedClientManager clientManager,
+		    ReactiveClientRegistrationRepository clientRegistrationRepository) {
 		this.delegate = new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientManager);
 		this.delegate.setDefaultClientRegistrationId("authserver"); // TODO
 		this.clientRegistrationRepository = clientRegistrationRepository;

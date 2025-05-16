@@ -47,7 +47,6 @@ public class McpWebFluxClientApplication {
     @Bean
     ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpAsyncClient> mcpClients) {
         return chatClientBuilder
-                // Removing this fixes the issue
                 .defaultToolCallbacks(new AsyncMcpToolCallbackProvider(mcpClients))
                 .build();
     }
@@ -57,7 +56,7 @@ public class McpWebFluxClientApplication {
      * {@link ExchangeFilterFunction} that adds OAuth2 tokens to requests sent to the MCP server.
      */
     @Bean
-    WebClient.Builder webClientBuilder(McpClientExchangeFilterFunction filter) {
+    WebClient.Builder webClientBuilder(McpAsyncClientExchangeFilterFunction filter) {
         return WebClient.builder().filter(filter);
     }
 

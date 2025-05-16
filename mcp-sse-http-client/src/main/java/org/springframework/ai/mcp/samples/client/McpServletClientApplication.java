@@ -27,27 +27,37 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 public class McpServletClientApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(McpServletClientApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(McpServletClientApplication.class, args);
+	}
 
-    @Bean
-    ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpSyncClient> mcpClients) {
-        return chatClientBuilder
-                .defaultTools(new SyncMcpToolCallbackProvider(mcpClients))
-                .build();
-    }
+	@Bean
+	ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpSyncClient> mcpClients) {
+		return chatClientBuilder.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients)).build();
+	}
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .oauth2Client(Customizer.withDefaults())
-                .csrf(CsrfConfigurer::disable)
-                .build();
-    }
+	/**
+	 * Overload Boot's default {@link WebClient.Builder}, so that we can inject an
+	 * oauth2-enabled {@link ExchangeFilterFunction} that adds OAuth2 tokens to requests
+	 * sent to the MCP server.
+	 */
+	@Bean
+	WebClient.Builder webClientBuilder(McpSyncClientExchangeFilterFunction filterFunction) {
+		return WebClient.builder().apply(filterFunction.configuration());
+	}
+
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+			.oauth2Client(Customizer.withDefaults())
+			.csrf(CsrfConfigurer::disable)
+			.build();
+	}
+
 }

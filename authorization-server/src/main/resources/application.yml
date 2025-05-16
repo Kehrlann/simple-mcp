@@ -24,7 +24,13 @@ spring:
                 - "client_credentials"
                 - "refresh_token"
               redirect-uris:
+                # Technically, only http://localhost:8080/authorize/oauth2/code/authserver is required.
+                # The port does not matter localhost, and we typically don't use the loopback interface.
                 - "http://127.0.0.1:8080/authorize/oauth2/code/authserver"
                 - "http://127.0.0.1:8080/login/oauth2/code/authserver"
                 - "http://localhost:8080/authorize/oauth2/code/authserver"
                 - "http://localhost:8080/login/oauth2/code/authserver"
+                - "http://127.0.0.1:8081/authorize/oauth2/code/authserver"
+                - "http://127.0.0.1:8081/login/oauth2/code/authserver"
+                - "http://localhost:8081/authorize/oauth2/code/authserver"
+                - "http://localhost:8081/login/oauth2/code/authserver"

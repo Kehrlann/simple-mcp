@@ -1,5 +1,9 @@
 server:
   port: 9000
+
+  # Cookies are per-domain, multiple apps running on localhost on different ports share cookies.
+  # This can create conflicts. We ensure the session cookie is different from the cookie that
+  # the client application uses.
   servlet:
     session:
       cookie:
@@ -7,9 +11,12 @@ server:
 
 spring:
   security:
+    # Provide a default "user"
     user:
       name: user
       password: password
+
+    # Configure the Authorization Server
     oauth2:
       authorizationserver:
         client:
@@ -24,7 +31,6 @@ spring:
                 - "client_credentials"
                 - "refresh_token"
               redirect-uris:
-                # Technically, only http://localhost:8080/authorize/oauth2/code/authserver is required.
-                # The port does not matter localhost, and we typically don't use the loopback interface.
+                # The client application can technically run on any port
                 - "http://127.0.0.1:8080/authorize/oauth2/code/authserver"
                 - "http://localhost:8080/authorize/oauth2/code/authserver"

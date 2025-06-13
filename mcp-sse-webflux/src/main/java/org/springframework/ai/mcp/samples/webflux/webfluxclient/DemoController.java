@@ -34,6 +34,7 @@ class DemoController {
 				<p>In which city would you like to see the weather?</p>
 				<form action="" method="GET">
 				    <input type="text" name="query" value="" placeholder="Paris" />
+				    <button type="submit">Ask the LLM</button>
 				</form>
 				""";
 		return Mono.justOrEmpty(query)

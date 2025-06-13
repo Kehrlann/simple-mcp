@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>mcp-sse-servlet-webflux-client</artifactId>
+	<artifactId>mcp-sse-servlet-http-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Spring AI - MCP Starter Default Client</name>
 	<description>Spring AI - MCP Starter Default Client</description>

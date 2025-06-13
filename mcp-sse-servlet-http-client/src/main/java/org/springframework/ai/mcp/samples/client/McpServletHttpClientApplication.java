@@ -28,8 +28,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.oauth2.client.ClientCredentialsOAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @SpringBootApplication
@@ -45,11 +45,11 @@ public class McpServletHttpClientApplication {
 	}
 
 	@Bean
-	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository) {
+	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository clientRepository) {
         return new McpSyncClientCustomizer() {
 			@Override
 			public void customize(String name, McpClient.SyncSpec spec) {
-				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository));
+				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository, clientRepository));
 			}
 		};
 	}

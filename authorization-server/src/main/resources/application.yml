@@ -34,3 +34,5 @@ spring:
                 # The client application can technically run on any port
                 - "http://127.0.0.1:8080/authorize/oauth2/code/authserver"
                 - "http://localhost:8080/authorize/oauth2/code/authserver"
+                - "http://localhost:8081/authorize/oauth2/code/authserver"
+                - "http://localhost:8082/authorize/oauth2/code/authserver"

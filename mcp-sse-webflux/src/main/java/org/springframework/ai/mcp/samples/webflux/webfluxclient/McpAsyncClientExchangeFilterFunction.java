@@ -1,4 +1,4 @@
-package org.springframework.ai.mcp.samples.client;
+package org.springframework.ai.mcp.samples.webflux.webfluxclient;
 
 import reactor.core.publisher.Mono;
 

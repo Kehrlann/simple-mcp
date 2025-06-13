@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.ai.mcp.samples.client;
+package org.springframework.ai.mcp.samples.webflux.webfluxclient;
 
 import io.modelcontextprotocol.client.McpAsyncClient;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.springframework.ai.mcp.samples.client;
+package org.springframework.ai.mcp.samples.servlet.httpclient;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.util.StringUtils;

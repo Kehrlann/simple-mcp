@@ -1,4 +1,4 @@
-package org.springframework.ai.mcp.samples.client;
+package org.springframework.ai.mcp.samples.servlet.httpclient;
 
 import io.modelcontextprotocol.client.SyncTokenSupplier;
 import java.util.Optional;

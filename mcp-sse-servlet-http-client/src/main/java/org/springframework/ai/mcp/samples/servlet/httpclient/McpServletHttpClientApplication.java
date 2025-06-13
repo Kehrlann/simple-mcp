@@ -13,28 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.ai.mcp.samples.client;
+package org.springframework.ai.mcp.samples.servlet.httpclient;
 
+import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.mcp.customizer.McpSyncClientCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
-public class McpServletWebfluxClientApplication {
+public class McpServletHttpClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(McpServletWebfluxClientApplication.class, args);
+		SpringApplication.run(McpServletHttpClientApplication.class, args);
 	}
 
 	@Bean
@@ -42,14 +44,14 @@ public class McpServletWebfluxClientApplication {
 		return chatClientBuilder.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients)).build();
 	}
 
-	/**
-	 * Overload Boot's default {@link WebClient.Builder}, so that we can inject an
-	 * oauth2-enabled {@link ExchangeFilterFunction} that adds OAuth2 tokens to requests
-	 * sent to the MCP server.
-	 */
 	@Bean
-	WebClient.Builder webClientBuilder(McpSyncClientExchangeFilterFunction filterFunction) {
-		return WebClient.builder().apply(filterFunction.configuration());
+	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository clientRepository) {
+        return new McpSyncClientCustomizer() {
+			@Override
+			public void customize(String name, McpClient.SyncSpec spec) {
+				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository, clientRepository));
+			}
+		};
 	}
 
 	@Bean

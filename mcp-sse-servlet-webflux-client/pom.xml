@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>mcp-sse-webflux-client</artifactId>
+	<artifactId>mcp-sse-servlet-webflux-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Spring AI - MCP Starter Default Client</name>
 	<description>Spring AI - MCP Starter Default Client</description>
@@ -46,9 +46,10 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- TODO - direct deps? -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>

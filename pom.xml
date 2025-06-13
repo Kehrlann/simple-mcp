@@ -14,8 +14,8 @@
 	<description>Building AI applications with Spring Boot</description>
 
 	<modules>		
-		<module>mcp-sse-http-client</module>
-		<module>mcp-sse-webflux-client</module>
+		<module>mcp-sse-servlet-webflux-client</module>
+		<module>mcp-sse-webflux</module>
 		<module>mcp-weather-webmvc-server</module>
 		<module>authorization-server</module>
 	</modules>

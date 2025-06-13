@@ -31,10 +31,10 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
-public class McpServletClientApplication {
+public class McpServletWebfluxClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(McpServletClientApplication.class, args);
+		SpringApplication.run(McpServletWebfluxClientApplication.class, args);
 	}
 
 	@Bean

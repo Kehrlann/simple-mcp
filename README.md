@@ -8,7 +8,7 @@ Before starting, set your Anthropic key in the env var `ANTHROPIC_API_KEY`.
 
 1. Run the authorization-server project, it starts on port 9000
 2. Run the MCP Server (mcp-weather-webmvc-server)
-3. Run the MCP client **Servlet** app (mcp-sse-http-client)
+3. Run the MCP client **Servlet** app (mcp-sse-servlet-webflux-client)
 4. Navigate to http://localhost:8080/
 5. When you try to get the temperature for, say, Paris, you will be redirected to the auth-server on port 9000. Log in
    with `user` / `password`. Tadaa 🎉
@@ -27,7 +27,7 @@ You MUST use the Anthropic model.
 
 1. Run the authorization-server project, it starts on port 9000
 2. Run the MCP Server (mcp-weather-webmvc-server)
-3. Run the MCP client **Reactive** app (mcp-sse-webflux-client)
+3. Run the MCP client **Reactive** app (mcp-sse-webflux)
 4. Navigate to http://localhost:8081/
 5. When you try to get the temperature for, say, Paris, you will be redirected to the auth-server on port 9000. Log in
    with `user` / `password`. Tadaa 🎉

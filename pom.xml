@@ -17,6 +17,7 @@
 		<module>mcp-sse-servlet-webflux-client</module>
 		<module>mcp-sse-servlet-http-client</module>
 		<module>mcp-sse-webflux</module>
+		<module>mcp-sse-webflux-http-client</module>
 		<module>mcp-weather-webmvc-server</module>
 		<module>authorization-server</module>
 	</modules>

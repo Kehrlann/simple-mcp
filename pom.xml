@@ -31,6 +31,7 @@
 
     <properties>
         <spring-ai.version>1.0.0</spring-ai.version>
+        <mcp.version>0.11.0-SNAPSHOT</mcp.version>
         <java.version>17</java.version>
     </properties>
 

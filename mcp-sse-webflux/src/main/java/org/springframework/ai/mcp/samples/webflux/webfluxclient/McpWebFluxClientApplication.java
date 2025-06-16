@@ -24,12 +24,17 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.AsyncMcpToolCallbackProvider;
 import org.springframework.ai.model.anthropic.autoconfigure.AnthropicChatAutoConfiguration;
 import org.springframework.ai.model.anthropic.autoconfigure.AnthropicConnectionProperties;
+import org.springframework.ai.model.tool.autoconfigure.ToolCallingProperties;
+import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
+import org.springframework.ai.tool.execution.ToolExecutionException;
+import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
@@ -58,6 +63,19 @@ public class McpWebFluxClientApplication {
     @Bean
     WebClient.Builder webClientBuilder(McpAsyncClientExchangeFilterFunction filter) {
         return WebClient.builder().filter(filter);
+    }
+
+    @Bean
+    ToolExecutionExceptionProcessor toolExecutionExceptionProcessor(ToolCallingProperties properties) {
+        return new DefaultToolExecutionExceptionProcessor(properties.isThrowExceptionOnError()) {
+            @Override
+            public String process(ToolExecutionException exception) {
+                if (exception.getCause() instanceof OAuth2AuthorizationException oauth2Exception) {
+                    throw oauth2Exception;
+                }
+                return super.process(exception);
+            }
+        };
     }
 
     /**

@@ -20,12 +20,17 @@ import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.model.tool.autoconfigure.ToolCallingProperties;
+import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
+import org.springframework.ai.tool.execution.ToolExecutionException;
+import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,6 +55,19 @@ public class McpServletWebfluxClientApplication {
 	@Bean
 	WebClient.Builder webClientBuilder(McpSyncClientExchangeFilterFunction filterFunction) {
 		return WebClient.builder().apply(filterFunction.configuration());
+	}
+
+	@Bean
+	ToolExecutionExceptionProcessor toolExecutionExceptionProcessor(ToolCallingProperties properties) {
+		return new DefaultToolExecutionExceptionProcessor(properties.isThrowExceptionOnError()) {
+			@Override
+			public String process(ToolExecutionException exception) {
+				if (exception.getCause() instanceof OAuth2AuthorizationException oauth2Exception) {
+					throw oauth2Exception;
+				}
+				return super.process(exception);
+			}
+		};
 	}
 
 	@Bean

@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.example.spring.ai</groupId>
-	<artifactId>spring-ai-examples-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<packaging>pom</packaging>
-	<url>https://github.com/spring-projects/spring-ai</url>
+    <groupId>wf.garnier.spring.ai.samples</groupId>
+    <artifactId>mcp-sample-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
-	<name>Spring AI</name>
-	<description>Building AI applications with Spring Boot</description>
+    <packaging>pom</packaging>
+    <url>https://github.com/spring-projects/spring-ai</url>
 
-	<modules>		
-		<module>mcp-sse-servlet-webflux-client</module>
-		<module>mcp-sse-servlet-http-client</module>
-		<module>mcp-sse-webflux</module>
-		<module>mcp-sse-webflux-http-client</module>
-		<module>mcp-weather-webmvc-server</module>
-		<module>authorization-server</module>
-	</modules>
+    <name>Spring AI</name>
+    <description>Building AI applications with Spring Boot</description>
+
+    <modules>
+        <module>mcp-sse-servlet-webflux-client</module>
+        <module>mcp-sse-servlet-http-client</module>
+        <module>mcp-sse-webflux</module>
+        <module>mcp-sse-webflux-http-client</module>
+        <module>mcp-weather-webmvc-server</module>
+        <module>authorization-server</module>
+        <module>../../modelcontextprotocol/java-sdk</module>
+        <module>../../spring-projects/spring-ai</module>
+    </modules>
+
+    <properties>
+        <spring-ai.version>1.1.0-SNAPSHOT</spring-ai.version>
+        <java.version>17</java.version>
+    </properties>
+
 
 </project>

@@ -22,6 +22,10 @@ import java.util.List;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.mcp.customizer.McpSyncClientCustomizer;
+import org.springframework.ai.model.tool.autoconfigure.ToolCallingProperties;
+import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
+import org.springframework.ai.tool.execution.ToolExecutionException;
+import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +34,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.security.web.SecurityFilterChain;
 
 @SpringBootApplication
@@ -45,8 +50,22 @@ public class McpServletHttpClientApplication {
 	}
 
 	@Bean
-	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository clientRepository) {
-        return new McpSyncClientCustomizer() {
+	ToolExecutionExceptionProcessor toolExecutionExceptionProcessor(ToolCallingProperties properties) {
+		return new DefaultToolExecutionExceptionProcessor(properties.isThrowExceptionOnError()) {
+			@Override
+			public String process(ToolExecutionException exception) {
+				if (exception.getCause() instanceof OAuth2AuthorizationException oauth2Exception) {
+					throw oauth2Exception;
+				}
+				return super.process(exception);
+			}
+		};
+	}
+
+	@Bean
+	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository,
+			OAuth2AuthorizedClientRepository clientRepository) {
+		return new McpSyncClientCustomizer() {
 			@Override
 			public void customize(String name, McpClient.SyncSpec spec) {
 				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository, clientRepository));

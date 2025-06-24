@@ -17,12 +17,11 @@ class DemoController {
 
 	private final ChatClient chatClient;
 
-	public DemoController(ChatClient chatClient) {
-		this.chatClient = chatClient;
-	}
+	private final AsyncTokenSupplier asyncTokenPublisher;
 
-	private static boolean test(ChatResponse cr) {
-		return cr.getResults().stream().anyMatch(r -> r.getOutput().hasToolCalls());
+	DemoController(ChatClient chatClient, AsyncTokenSupplier asyncTokenPublisher) {
+		this.chatClient = chatClient;
+		this.asyncTokenPublisher = asyncTokenPublisher;
 	}
 
 	@GetMapping("/")
@@ -59,8 +58,7 @@ class DemoController {
 			.mapNotNull(Generation::getOutput)
 			.mapNotNull(AssistantMessage::getText)
 			.collect(Collectors.joining(" "))
-			// TODO: add tokenPublisher in the context
-			.contextWrite(ctx -> ctx.put("tokenPublisher", null));
+			.contextWrite(ctx -> ctx.put("tokenPublisher", asyncTokenPublisher.getToken()));
 	}
 
 	// Ideally we want to use this

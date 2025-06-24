@@ -1,6 +1,6 @@
 package org.springframework.ai.mcp.samples.servlet.httpclient;
 
-import io.modelcontextprotocol.client.SyncTokenSupplier;
+import io.modelcontextprotocol.client.McpSyncTokenSupplier;
 import java.util.Optional;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -18,7 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * Spring-specific implementation of MCP's {@link SyncTokenSupplier}. Gets an OAuth2 token
+ * Spring-specific implementation of MCP's {@link McpSyncTokenSupplier}. Gets an OAuth2 token
  * from the Authorization Server, and makes it available.
  * <p>
  * The end goal is to use access_token that represent the end-user's permissions. Those
@@ -32,7 +32,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * on the OAuth2 {@code client_credentials} flow for machine-to-machine communication.
  *
  */
-public class SpringSyncTokenSupplier implements SyncTokenSupplier {
+public class SpringMcpSyncTokenSupplier implements McpSyncTokenSupplier {
 
 	private final ClientCredentialsOAuth2AuthorizedClientProvider clientCredentialTokenProvider = new ClientCredentialsOAuth2AuthorizedClientProvider();
 
@@ -55,8 +55,8 @@ public class SpringSyncTokenSupplier implements SyncTokenSupplier {
 			"client-credentials-client", "client-credentials-client",
 			AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
 
-	public SpringSyncTokenSupplier(ClientRegistrationRepository clientRegistrationRepository,
-			OAuth2AuthorizedClientRepository clientRepository) {
+	public SpringMcpSyncTokenSupplier(ClientRegistrationRepository clientRegistrationRepository,
+									  OAuth2AuthorizedClientRepository clientRepository) {
 		this.oauth2AuthorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository,
 				clientRepository);
 		this.oauth2AuthorizedClientManager.setAuthorizedClientProvider(

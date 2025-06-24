@@ -35,4 +35,6 @@ spring:
                 - "http://127.0.0.1:8080/authorize/oauth2/code/authserver"
                 - "http://localhost:8080/authorize/oauth2/code/authserver"
                 - "http://localhost:8081/authorize/oauth2/code/authserver"
-                - "http://localhost:8082/authorize/oauth2/code/authserver"
+                # In Reactive Spring Security, the redirect URI has a /login fragment instead of /authorize
+                - "http://localhost:8082/login/oauth2/code/authserver"
+                - "http://localhost:8083/login/oauth2/code/authserver"

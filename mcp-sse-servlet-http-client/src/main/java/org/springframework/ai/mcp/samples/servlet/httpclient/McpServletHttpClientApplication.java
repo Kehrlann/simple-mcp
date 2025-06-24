@@ -49,7 +49,7 @@ public class McpServletHttpClientApplication {
         return new McpSyncClientCustomizer() {
 			@Override
 			public void customize(String name, McpClient.SyncSpec spec) {
-				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository, clientRepository));
+				spec.tokenSupplier(new SpringMcpSyncTokenSupplier(clientRegistrationRepository, clientRepository));
 			}
 		};
 	}

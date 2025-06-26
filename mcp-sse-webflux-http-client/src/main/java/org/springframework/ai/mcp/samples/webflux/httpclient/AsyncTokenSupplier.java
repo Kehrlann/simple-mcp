@@ -30,7 +30,7 @@ class AsyncTokenSupplier implements McpAsyncTokenSupplier {
 	private final ClientCredentialsReactiveOAuth2AuthorizedClientProvider clientCredentialTokenProvider = new ClientCredentialsReactiveOAuth2AuthorizedClientProvider();
 
 	AsyncTokenSupplier(ReactiveClientRegistrationRepository clientRegistrationRepository,
-					   ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+			ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
 		this.clientRegistrationRepository = clientRegistrationRepository;
 		this.authorizedClientManager = new DefaultReactiveOAuth2AuthorizedClientManager(clientRegistrationRepository,
 				authorizedClientRepository);

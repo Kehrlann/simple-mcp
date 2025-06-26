@@ -2,6 +2,7 @@ package org.springframework.ai.mcp.samples.webflux.httpclient;
 
 import javax.validation.constraints.NotNull;
 
+import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
 import java.util.stream.Collectors;
 import reactor.core.publisher.Mono;
 
@@ -58,7 +59,7 @@ class DemoController {
 			.mapNotNull(Generation::getOutput)
 			.mapNotNull(AssistantMessage::getText)
 			.collect(Collectors.joining(" "))
-			.contextWrite(ctx -> ctx.put("tokenPublisher", asyncTokenPublisher.getToken()));
+			.contextWrite(ctx -> ctx.put(HttpClientSseClientTransport.TOKEN_SUPPLIER_CONTEXT_KEY, asyncTokenPublisher));
 	}
 
 	// Ideally we want to use this

@@ -37,16 +37,19 @@ public class McpWebfluxHttpClientApplication {
 	}
 
 	@Bean
-	ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpAsyncClient> mcpClients) {
-		return chatClientBuilder.defaultToolCallbacks(new AsyncMcpToolCallbackProvider(mcpClients)).build();
+	ChatClient chatClient(ChatClient.Builder chatClientBuilder, List<McpAsyncClient> mcpClients,
+			AsyncTokenSupplier asyncTokenSupplier) {
+		return chatClientBuilder.defaultToolCallbacks(new AsyncMcpToolCallbackProvider(mcpClients, asyncTokenSupplier))
+			.build();
 	}
 
 	@Bean
 	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-		http.authorizeExchange(authorize -> authorize.anyExchange().permitAll())
+		return http.authorizeExchange(authorize -> authorize.anyExchange().permitAll())
 			.oauth2Client(Customizer.withDefaults())
-			.csrf(ServerHttpSecurity.CsrfSpec::disable);
-		return http.build();
+			.csrf(ServerHttpSecurity.CsrfSpec::disable)
+			.anonymous(Customizer.withDefaults())
+			.build();
 	}
 
 }

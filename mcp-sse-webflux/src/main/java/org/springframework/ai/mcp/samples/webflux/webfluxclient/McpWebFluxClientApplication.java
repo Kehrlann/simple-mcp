@@ -98,7 +98,8 @@ public class McpWebFluxClientApplication {
                         .anyExchange().permitAll()
                 )
                 .oauth2Client(Customizer.withDefaults())
-                .csrf(ServerHttpSecurity.CsrfSpec::disable);
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .anonymous(Customizer.withDefaults());
         return http.build();
     }
 

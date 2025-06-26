@@ -27,8 +27,8 @@
         <module>mcp-sse-webflux-http-client</module>
         <module>mcp-weather-webmvc-server</module>
         <module>authorization-server</module>
-        <module>../../modelcontextprotocol/java-sdk</module>
         <module>../../spring-projects/spring-ai</module>
+        <module>../../modelcontextprotocol/java-sdk</module>
     </modules>
 
     <properties>
@@ -37,5 +37,16 @@
         <java.version>17</java.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.modelcontextprotocol.sdk</groupId>
+                <artifactId>mcp-bom</artifactId>
+                <version>${mcp.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

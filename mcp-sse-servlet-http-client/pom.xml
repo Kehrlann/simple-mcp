@@ -43,12 +43,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
-			<artifactId>mcp</artifactId>
-			<version>${mcp.version}</version>
-		</dependency>
-
 		<!-- TODO - direct deps? -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

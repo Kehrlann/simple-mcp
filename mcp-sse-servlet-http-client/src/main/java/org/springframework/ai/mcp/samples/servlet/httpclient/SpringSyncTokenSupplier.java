@@ -1,6 +1,5 @@
 package org.springframework.ai.mcp.samples.servlet.httpclient;
 
-import io.modelcontextprotocol.client.SyncTokenSupplier;
 import java.util.Optional;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -32,7 +31,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * on the OAuth2 {@code client_credentials} flow for machine-to-machine communication.
  *
  */
-public class SpringSyncTokenSupplier implements SyncTokenSupplier {
+public class SpringSyncTokenSupplier  {
 
 	private final ClientCredentialsOAuth2AuthorizedClientProvider clientCredentialTokenProvider = new ClientCredentialsOAuth2AuthorizedClientProvider();
 
@@ -64,7 +63,6 @@ public class SpringSyncTokenSupplier implements SyncTokenSupplier {
 		this.clientRegistrationRepository = clientRegistrationRepository;
 	}
 
-	@Override
 	public Optional<String> getToken() {
 		if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes) {
 			// In the context of a web request, there is an end-user interacting with the

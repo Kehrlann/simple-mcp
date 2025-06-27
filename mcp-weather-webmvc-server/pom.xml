@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mcp-simple-weather-server</artifactId>
+    <artifactId>mcp-weather-webmvc-server</artifactId>
     <name>Spring AI MCP Simple - Weather Server</name>
     <description>Sample Spring Boot application demonstrating MCP client and server sampling usage</description>
 

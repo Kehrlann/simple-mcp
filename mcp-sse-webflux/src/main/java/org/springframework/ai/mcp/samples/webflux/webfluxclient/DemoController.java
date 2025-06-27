@@ -22,10 +22,6 @@ class DemoController {
 		this.chatClient = chatClient;
 	}
 
-	private static boolean test(ChatResponse cr) {
-		return cr.getResults().stream().anyMatch(r -> r.getOutput().hasToolCalls());
-	}
-
 	@GetMapping("/")
 	Mono<String> index(String query) {
 		String questionForm = """
@@ -54,12 +50,11 @@ class DemoController {
 			.stream()
 			.chatResponse()
 			// Discard everything before the first "tool call"
-			.skipUntil(cr -> cr.getResults().stream().anyMatch(r -> r.getOutput().hasToolCalls()))
 			.flatMapIterable(ChatResponse::getResults)
 			// Only keep textual output
 			.mapNotNull(Generation::getOutput)
 			.mapNotNull(AssistantMessage::getText)
-			.collect(Collectors.joining(" "));
+			.collect(Collectors.joining());
 	}
 
 	// Ideally we want to use this

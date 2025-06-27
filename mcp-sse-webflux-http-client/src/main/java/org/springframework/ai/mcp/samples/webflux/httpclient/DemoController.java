@@ -53,12 +53,11 @@ class DemoController {
 			.stream()
 			.chatResponse()
 			// Discard everything before the first "tool call"
-			.skipUntil(cr -> cr.getResults().stream().anyMatch(r -> r.getOutput().hasToolCalls()))
 			.flatMapIterable(ChatResponse::getResults)
 			// Only keep textual output
 			.mapNotNull(Generation::getOutput)
 			.mapNotNull(AssistantMessage::getText)
-			.collect(Collectors.joining(" "))
+			.collect(Collectors.joining())
 			.contextWrite(ctx -> ctx.put(HttpClientSseClientTransport.TOKEN_SUPPLIER_CONTEXT_KEY, asyncTokenPublisher));
 	}
 

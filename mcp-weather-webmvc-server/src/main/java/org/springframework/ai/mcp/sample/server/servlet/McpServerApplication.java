@@ -1,4 +1,4 @@
-package org.springframework.ai.mcp.sample.server;
+package org.springframework.ai.mcp.sample.server.servlet;
 
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;

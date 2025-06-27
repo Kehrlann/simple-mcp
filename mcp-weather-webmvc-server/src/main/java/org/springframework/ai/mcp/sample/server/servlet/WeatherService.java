@@ -13,22 +13,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.springframework.ai.mcp.sample.server;
+package org.springframework.ai.mcp.sample.server.servlet;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import io.modelcontextprotocol.server.McpSyncServerExchange;
-import io.modelcontextprotocol.spec.McpSchema;
-import io.modelcontextprotocol.spec.McpSchema.CreateMessageResult;
-import io.modelcontextprotocol.spec.McpSchema.LoggingLevel;
-import io.modelcontextprotocol.spec.McpSchema.LoggingMessageNotification;
-import io.modelcontextprotocol.spec.McpSchema.ModelPreferences;
 import org.slf4j.Logger;
 
 import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.mcp.McpToolUtils;
-import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;

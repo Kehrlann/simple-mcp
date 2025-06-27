@@ -22,6 +22,9 @@ import org.slf4j.Logger;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -47,11 +50,13 @@ public class WeatherService {
 		}
 	}
 
+	@PreAuthorize("authentication.getName().equals('user')")
 	@Tool(description = "Get the temperature (in celsius) for a specific location")
 	public WeatherResponse getTemperature(@ToolParam(description = "The location latitude") double latitude,
 			@ToolParam(description = "The location longitude") double longitude,
 			ToolContext toolContext) {
-
+		var auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(auth);
 		WeatherResponse weatherResponse = restClient
 				.get()
 				.uri("https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m",

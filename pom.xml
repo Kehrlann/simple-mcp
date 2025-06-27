@@ -28,10 +28,14 @@
         <module>mcp-weather-webmvc-server</module>
         <module>mcp-weather-webflux-server</module>
         <module>authorization-server</module>
+        <!-- Use branch dgarnier/server-context-propagation -->
+        <module>../../modelcontextprotocol/java-sdk</module>
+        <!-- Use branch dgarnier/mcp-server-context-propagation -->
+        <module>../../spring-projects/spring-ai</module>
     </modules>
 
     <properties>
-        <spring-ai.version>1.0.0</spring-ai.version>
+        <spring-ai.version>1.1.0-SNAPSHOT</spring-ai.version>
         <mcp.version>0.11.0-SNAPSHOT</mcp.version>
         <java.version>17</java.version>
     </properties>

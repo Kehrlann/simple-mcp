@@ -11,11 +11,6 @@ server:
 
 spring:
   security:
-    # Provide a default "user"
-    user:
-      name: user
-      password: password
-
     # Configure the Authorization Server
     oauth2:
       authorizationserver:

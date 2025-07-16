@@ -1,6 +1,5 @@
 package org.springframework.ai.mcp.samples.servlet.httpclient;
 
-import io.modelcontextprotocol.client.SyncTokenSupplier;
 import java.util.Optional;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -18,8 +17,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * Spring-specific implementation of MCP's {@link SyncTokenSupplier}. Gets an OAuth2 token
- * from the Authorization Server, and makes it available.
+ * Experiment for supplying tokens to MCP client. Gets an OAuth2 token from the Authorization
+ * Server, and makes it available. This used to be an interface from MCP/java-sdk, but is only
+ * kept here as a reference.
  * <p>
  * The end goal is to use access_token that represent the end-user's permissions. Those
  * tokens are obtained using the {@code authorization_code} OAuth2 flow, but it requires a
@@ -32,7 +32,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * on the OAuth2 {@code client_credentials} flow for machine-to-machine communication.
  *
  */
-public class SpringSyncTokenSupplier implements SyncTokenSupplier {
+public class SpringSyncTokenSupplier {
 
 	private final ClientCredentialsOAuth2AuthorizedClientProvider clientCredentialTokenProvider = new ClientCredentialsOAuth2AuthorizedClientProvider();
 
@@ -64,7 +64,6 @@ public class SpringSyncTokenSupplier implements SyncTokenSupplier {
 		this.clientRegistrationRepository = clientRegistrationRepository;
 	}
 
-	@Override
 	public Optional<String> getToken() {
 		if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes) {
 			// In the context of a web request, there is an end-user interacting with the

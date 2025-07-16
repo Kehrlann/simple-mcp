@@ -15,21 +15,17 @@
  */
 package org.springframework.ai.mcp.samples.servlet.httpclient;
 
-import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
-import org.springframework.ai.mcp.customizer.McpSyncClientCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @SpringBootApplication
@@ -44,15 +40,6 @@ public class McpServletHttpClientApplication {
 		return chatClientBuilder.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients)).build();
 	}
 
-	@Bean
-	McpSyncClientCustomizer mcpOAuth2Customizer(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository clientRepository) {
-        return new McpSyncClientCustomizer() {
-			@Override
-			public void customize(String name, McpClient.SyncSpec spec) {
-				spec.tokenSupplier(new SpringSyncTokenSupplier(clientRegistrationRepository, clientRepository));
-			}
-		};
-	}
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
